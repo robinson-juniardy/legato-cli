@@ -1,0 +1,36 @@
+{
+  "name": "@legato/cli",
+  "version": "1.0.0",
+  "description": "legato cli",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "lgo": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinson-juniardy/legato-cli.git"
+  },
+  "keywords": [
+    "legatojs"
+  ],
+  "author": "Robby Juniardi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robinson-juniardy/legato-cli/issues"
+  },
+  "homepage": "https://github.com/robinson-juniardy/legato-cli#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "esm": "^3.2.25",
+    "execa": "^6.1.0",
+    "inquirer": "^8.0.0",
+    "listr": "^0.14.3",
+    "shelljs": "^0.8.5",
+    "yargs": "^17.5.1"
+  }
+}
