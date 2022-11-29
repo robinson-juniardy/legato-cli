@@ -1,5 +1,5 @@
 {
-  "name": "@legato/cli",
+  "name": "@legatojs/cli",
   "version": "1.0.0",
   "description": "legato cli",
   "main": "index.js",
