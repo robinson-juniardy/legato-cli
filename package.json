@@ -4,6 +4,9 @@
   "description": "legato cli",
   "main": "index.js",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "lgo": "index.js"
   },
