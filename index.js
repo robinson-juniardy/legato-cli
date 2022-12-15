@@ -78,8 +78,6 @@ function runTasks(appname) {
 function CreateArguments() {
   const argument = argv["_"];
 
-  console.log(argv);
-
   if (argument) {
     const commander = argument[0];
     const generateType = argument[1];
