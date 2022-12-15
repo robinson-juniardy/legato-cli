@@ -1,6 +1,6 @@
 {
   "name": "@legatojs/cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "legato cli",
   "main": "index.js",
   "type": "module",

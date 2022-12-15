@@ -118,7 +118,10 @@ function CreateArguments() {
                       modulePath,
                       String(`${argument[2]}.controller.ts`).toLocaleLowerCase()
                     ),
-                    controllerWithPath(String(argument[2]).toLocaleLowerCase())
+                    controllerWithPath(
+                      String(argument[2]).toLocaleLowerCase(),
+                      argv.path
+                    )
                   );
                   fs.writeFileSync(
                     path.join(
