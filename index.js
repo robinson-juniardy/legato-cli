@@ -10,7 +10,12 @@ import { hideBin } from "yargs/helpers";
 import fs from "fs";
 import path from "path";
 import _package from "./lib/package.json.js";
-import { controller, services } from "./lib/boilerplate.js";
+import {
+  controller,
+  controllerWithPath,
+  services,
+  servicesWithPath,
+} from "./lib/boilerplate.js";
 
 const prompt = inquirer.createPromptModule();
 
@@ -73,6 +78,8 @@ function runTasks(appname) {
 function CreateArguments() {
   const argument = argv["_"];
 
+  console.log(argv);
+
   if (argument) {
     const commander = argument[0];
     const generateType = argument[1];
@@ -95,81 +102,162 @@ function CreateArguments() {
               });
             }
           } else if (generateType === "module") {
-            if (argument[2]) {
-              const modulePath = path.join(
-                process.cwd(),
-                "src/app",
-                String(argument[2]).toLocaleLowerCase()
-              );
+            if (argv.path) {
+              if (argument[2]) {
+                const modulePath = path.join(
+                  process.cwd(),
+                  "src/app",
+                  argv.path,
+                  String(argument[2]).toLocaleLowerCase()
+                );
+                if (fs.existsSync(modulePath)) {
+                  console.log(chalk.red("module already exist"));
+                } else {
+                  shell.mkdir("-p", modulePath);
 
-              if (fs.existsSync(modulePath)) {
-                console.log(chalk.red("module already exist"));
+                  fs.writeFileSync(
+                    path.join(
+                      modulePath,
+                      String(`${argument[2]}.controller.ts`).toLocaleLowerCase()
+                    ),
+                    controllerWithPath(String(argument[2]).toLocaleLowerCase())
+                  );
+                  fs.writeFileSync(
+                    path.join(
+                      modulePath,
+                      String(`${argument[2]}.service.ts`).toLocaleLowerCase()
+                    ),
+                    servicesWithPath(String(argument[2]).toLocaleLowerCase())
+                  );
+                  console.log(
+                    chalk.green("module has been created successfully")
+                  );
+                }
               } else {
-                shell.mkdir("-p", modulePath);
+                prompt({
+                  type: "input",
+                  name: "module_name",
+                  message: "what is your module name ?",
+                }).then((answer) => {
+                  if (answer.module_name) {
+                    const modulePath = path.join(
+                      process.cwd(),
+                      "src/app",
+                      String(answer.module_name).toLocaleLowerCase()
+                    );
 
-                fs.writeFileSync(
-                  path.join(
-                    modulePath,
-                    String(`${argument[2]}.controller.ts`).toLocaleLowerCase()
-                  ),
-                  controller(String(argument[2]).toLocaleLowerCase())
-                );
+                    if (fs.existsSync(modulePath)) {
+                      console.log(chalk.red("module already exist"));
+                    } else {
+                      shell.mkdir("-p", modulePath);
 
-                fs.writeFileSync(
-                  path.join(
-                    modulePath,
-                    String(`${argument[2]}.service.ts`).toLocaleLowerCase()
-                  ),
-                  services(String(argument[2]).toLocaleLowerCase())
-                );
+                      fs.writeFileSync(
+                        path.join(
+                          modulePath,
+                          String(
+                            `${answer.module_name}.controller.ts`
+                          ).toLocaleLowerCase()
+                        ),
+                        controller(
+                          String(answer.module_name).toLocaleLowerCase()
+                        )
+                      );
 
-                console.log(
-                  chalk.green("module has been created successfully")
-                );
+                      fs.writeFileSync(
+                        path.join(
+                          modulePath,
+                          String(
+                            `${answer.module_name}.service.ts`
+                          ).toLocaleLowerCase()
+                        ),
+                        services(String(answer.module_name).toLocaleLowerCase())
+                      );
+                      console.log(
+                        chalk.green("module has been created successfully")
+                      );
+                    }
+                  }
+                });
               }
             } else {
-              prompt({
-                type: "input",
-                name: "module_name",
-                message: "what is your module name ?",
-              }).then((answer) => {
-                if (answer.module_name) {
-                  const modulePath = path.join(
-                    process.cwd(),
-                    "src/app",
-                    String(answer.module_name).toLocaleLowerCase()
+              if (argument[2]) {
+                const modulePath = path.join(
+                  process.cwd(),
+                  "src/app",
+                  String(argument[2]).toLocaleLowerCase()
+                );
+
+                if (fs.existsSync(modulePath)) {
+                  console.log(chalk.red("module already exist"));
+                } else {
+                  shell.mkdir("-p", modulePath);
+
+                  fs.writeFileSync(
+                    path.join(
+                      modulePath,
+                      String(`${argument[2]}.controller.ts`).toLocaleLowerCase()
+                    ),
+                    controllerWithPath(String(argument[2]).toLocaleLowerCase())
                   );
 
-                  if (fs.existsSync(modulePath)) {
-                    console.log(chalk.red("module already exist"));
-                  } else {
-                    shell.mkdir("-p", modulePath);
+                  fs.writeFileSync(
+                    path.join(
+                      modulePath,
+                      String(`${argument[2]}.service.ts`).toLocaleLowerCase()
+                    ),
+                    services(String(argument[2]).toLocaleLowerCase())
+                  );
 
-                    fs.writeFileSync(
-                      path.join(
-                        modulePath,
-                        String(
-                          `${answer.module_name}.controller.ts`
-                        ).toLocaleLowerCase()
-                      ),
-                      controller(String(answer.module_name).toLocaleLowerCase())
-                    );
-
-                    fs.writeFileSync(
-                      path.join(
-                        modulePath,
-                        String(
-                          `${answer.module_name}.service.ts`
-                        ).toLocaleLowerCase()
-                      ),
-                      services(String(answer.module_name).toLocaleLowerCase())
-                    );
-                    console.log(
-                      chalk.green("module has been created successfully")
-                    );
-                  }
+                  console.log(
+                    chalk.green("module has been created successfully")
+                  );
                 }
-              });
+              } else {
+                prompt({
+                  type: "input",
+                  name: "module_name",
+                  message: "what is your module name ?",
+                }).then((answer) => {
+                  if (answer.module_name) {
+                    const modulePath = path.join(
+                      process.cwd(),
+                      "src/app",
+                      String(answer.module_name).toLocaleLowerCase()
+                    );
+
+                    if (fs.existsSync(modulePath)) {
+                      console.log(chalk.red("module already exist"));
+                    } else {
+                      shell.mkdir("-p", modulePath);
+
+                      fs.writeFileSync(
+                        path.join(
+                          modulePath,
+                          String(
+                            `${answer.module_name}.controller.ts`
+                          ).toLocaleLowerCase()
+                        ),
+                        controller(
+                          String(answer.module_name).toLocaleLowerCase()
+                        )
+                      );
+
+                      fs.writeFileSync(
+                        path.join(
+                          modulePath,
+                          String(
+                            `${answer.module_name}.service.ts`
+                          ).toLocaleLowerCase()
+                        ),
+                        services(String(answer.module_name).toLocaleLowerCase())
+                      );
+                      console.log(
+                        chalk.green("module has been created successfully")
+                      );
+                    }
+                  }
+                });
+              }
             }
           } else {
             console.log(
