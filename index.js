@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execSync } from "child_process";
+import { execSync, exec } from "child_process";
 import Listr from "listr";
 import { execa } from "execa";
 import chalk from "chalk";
@@ -10,12 +10,15 @@ import { hideBin } from "yargs/helpers";
 import fs from "fs";
 import path from "path";
 import _package from "./lib/package.json.js";
+import open from "open";
 import {
   controller,
   controllerWithPath,
   services,
   servicesWithPath,
 } from "./lib/boilerplate.js";
+import { platform } from "os";
+import puppeteer from "puppeteer";
 
 const prompt = inquirer.createPromptModule();
 
@@ -30,6 +33,15 @@ const runCmd = (command) => {
   }
   return true;
 };
+
+async function openBrowser() {
+  const url = "http://localhost:8888/welcome";
+  await open(url);
+
+  execSync("npm run dev", {
+    stdio: "inherit",
+  });
+}
 
 function MakeModule(name) {
   services(name);
@@ -291,6 +303,8 @@ function CreateArguments() {
             }
           });
         }
+      case "serve":
+        openBrowser();
     }
   }
 }
