@@ -303,8 +303,10 @@ function CreateArguments() {
             }
           });
         }
+        break;
       case "serve":
         openBrowser();
+        break;
     }
   }
 }
